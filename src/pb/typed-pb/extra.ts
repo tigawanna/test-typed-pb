@@ -1,3 +1,4 @@
+import { CollectionField } from "pocketbase";
 import { Collection, Field } from "./extra-types";
 
 export interface GenerateOptions {
@@ -159,7 +160,7 @@ export function buildCollectionDefinitions(collections: Collection[]) {
   return Array.from(definitions.values());
 }
 
-export function getFieldType(field: Field, { response, create, update }: Columns) {
+export function getFieldType(field: CollectionField, { response, create, update }: Columns) {
 
   const addResponse = (type: string, name = field.name) => response.push(`${name}: ${type};`);
   const addCreate = (type: string, name = field.name) =>
@@ -212,10 +213,11 @@ export function getFieldType(field: Field, { response, create, update }: Columns
       break;
     }
     case "select": {
-      console.log("select field", field);  
-      const single = field.maxSelect === 1;
+      const selectField = field as CollectionField & { maxSelect: number; values: string[] };
+      console.log("select field", selectField);  
+      const single = selectField.maxSelect === 1;
       const values =
-        !field.required && single ? ["", ...field.values] : field.values;
+        !selectField.required && single ? ["", ...selectField.values] : selectField.values;
       const singleType = values.map((v) => `'${v}'`).join(" | ");
       const type = single ? `${singleType}` : `MaybeArray<${singleType}>`;
 

@@ -15,7 +15,7 @@
     "pocketbase": "0.22.0-rc",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "typed-pocketbase": "link:/home/dennis/Desktop/code/clone/typed-pocketbase-dev/typed-pocketbase"
+    "typed-pocketbase": "link:/home/dennis/Desktop/code/clone/types-for-pocketbase/typed-pocketbase"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",

@@ -5,7 +5,7 @@ import { buildCollectionDefinitions } from "./typed-pb/extra";
 import { Collection } from "./typed-pb/extra-types";
 
 export const PB_URL = "http://127.0.0.1:8090";
-export const RC_PB_URL = "http://127.0.0.1:8091";
+// export const RC_PB_URL = "http://127.0.0.1:8091";
 
 export const pb = new PocketBase(PB_URL);
 export const typedPb = new TypedPocketBase<Schema>(PB_URL);
@@ -51,7 +51,17 @@ export async function getPostsWithComments() {
 export async function getCollectiontypes(url: string) {
   try {
     const pb = new PocketBase(url);
+      const batch = pb.createBatch();
+      batch.collection("example1").create({});
     await pb.admins.authWithPassword("admin1@email.com", "admin1@email.com");
+        await pb.collection("_superusers").requestOTP("admin1@email.com");
+
+        await pb.collection("_superusers").authRefresh()
+        await pb.collection("users").authWithOTP("otp code", "EMAIL_CODE");
+        const impersonateClient = pb
+          .collection("users")
+          .impersonate("USER_RECORD_ID", 3600 /* optional token duration in seconds */);
+          
     const collections = await pb.collections.getFullList<Collection>();
     console.log(" ✅ Get collections", collections);
     const definitions = buildCollectionDefinitions(collections);
@@ -64,13 +74,19 @@ export async function getCollectiontypes(url: string) {
 }
 export async function getRCCollectionTypes() {
   try {
-    const pb = new PocketBase(RC_PB_URL);
-    // pb.collection("_superusers").impersonate()
-    pb.collection("users").
-    // await pb.admins.authWithPassword("admin1@email.com", "admin1@email.com");
-    await pb.collection("_superusers").authWithPassword("admin1@email.com", "admin1@email.com");
+  const pb = new TypedPocketBase<Schema>(PB_URL);
+
+  // frombatch.from("comments").create({});
+
+    await pb.from("_superusers").authWithPassword("admin1@email.com", "admin1@email.com");
+    const impersonate = await pb.impersonate("users","admin1@email.com", 3600)
+
+
+    // await pb.from("_superusers").authWithPassword("otp code", "EMAIL_CODE")
+//  const impersonateClient =   await pb.impersonate("users", "USER_RECORD_ID", 3600 /* optional token duration in seconds */);
+
     const collections = await pb.collections.getFullList<Collection>();
-        console.log(" ✅ Get collections", collections);
+    console.log(" ✅ Get collections", collections);
     const definitions = buildCollectionDefinitions(collections);
     console.log(definitions);
 

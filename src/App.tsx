@@ -4,7 +4,7 @@ import {  getRCCollectionTypes } from './pb/client'
 
 function App() {
   useEffect(() => {
-getRCCollectionTypes()
+  getRCCollectionTypes()
   },[])
   return (
     <div>
