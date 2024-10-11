@@ -52,15 +52,18 @@ export async function getCollectiontypes(url: string) {
   try {
     const pb = new PocketBase(url);
       const batch = pb.createBatch();
-      batch.collection("example1").create({});
+      batch.collection("example1").create({
+
+      },{
+   
+      });
+
     await pb.admins.authWithPassword("admin1@email.com", "admin1@email.com");
         await pb.collection("_superusers").requestOTP("admin1@email.com");
 
         await pb.collection("_superusers").authRefresh()
         await pb.collection("users").authWithOTP("otp code", "EMAIL_CODE");
-        const impersonateClient = pb
-          .collection("users")
-          .impersonate("USER_RECORD_ID", 3600 /* optional token duration in seconds */);
+
           
     const collections = await pb.collections.getFullList<Collection>();
     console.log(" ✅ Get collections", collections);
@@ -76,21 +79,13 @@ export async function getRCCollectionTypes() {
   try {
   const pb = new TypedPocketBase<Schema>(PB_URL);
 
-  // frombatch.from("comments").create({});
+      const batch = pb.fromBatch()
+      batch.from("users").create({});
 
     await pb.from("_superusers").authWithPassword("admin1@email.com", "admin1@email.com");
-    const impersonate = await pb.impersonate("users","admin1@email.com", 3600)
-
-
-    // await pb.from("_superusers").authWithPassword("otp code", "EMAIL_CODE")
-//  const impersonateClient =   await pb.impersonate("users", "USER_RECORD_ID", 3600 /* optional token duration in seconds */);
-
     const collections = await pb.collections.getFullList<Collection>();
     console.log(" ✅ Get collections", collections);
-    const definitions = buildCollectionDefinitions(collections);
-    console.log(definitions);
-
-    // console.log(" ✅ Get collections", collections);
+  // console.log(" ✅ Get collections", collections);
   } catch (error) {
     console.log("❌ Get collections failed", error);
   }
