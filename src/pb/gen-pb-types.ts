@@ -157,11 +157,41 @@ export async function filterByCollection(schema_string: string, collection = "")
     }
     //  add init types ( shared pocketbase types )
     const init_types = lines.slice(0, first_block_index);
+     const collections_to_include = [collection]
+    const all_block_indexes_array = Object.entries(all_block_indexes)
+    const targetCollectionsIndexes = all_block_indexes_array.filter((el) => el[0].includes(collection))
+    // console.log({ targetCollectionsIndexes })
+    targetCollectionsIndexes.flatMap((coll)=>{
+      const relationType = lines.slice(coll[1][0], coll[1][1]).join("\n");
+    //  isolate any relations:{}
+      const regex = /relations:\s*{\s*([^}]+)\s*}/;
+      const match = regex.exec(relationType);
+
+      if (match) {
+        const relationFields = match[1].split(",").map((field) => field.trim());
+        const fieldNames = relationFields.flatMap((field) => {
+          const fieldName = field.split(";").map((part) => part.split(":")[0]
+          .replace("\t\t", "")
+          .replace("\t", "")
+          .replace("\n", "")
+          // .split("_")[0]
+        );
+          return fieldName
+        });
+        console.log({ fieldNames })
+        collections_to_include.push(...fieldNames)
+      }
+      return coll[1]
+    })
+    // console.log("targetCollection == ",targetCollection)
     text_output = init_types.join("\n");
+
     //  Main types section
-    for (const [key, value] of Object.entries(all_block_indexes)) {
+    for (const [key, value] of all_block_indexes_array) {
+      const collection_in_included_list = collections_to_include.filter((el) => el.includes(key))
       // filter only for specified collection
-      if (!key.includes(collection)) continue;
+      if (!collection_in_included_list) continue;
+      // if (!key.includes(collection)) continue;
       const selected_lines = lines.slice(value[0], value[1]);
       selected_lines.splice(0, 1, `// ==== start of ${key} block =====\n`);
       selected_lines.push(`// ==== end of ${key} block =====\n`);
@@ -190,6 +220,7 @@ export async function filterByCollection(schema_string: string, collection = "")
       const filtered_schema_lines = [];
 
       for (const line of schema_lines) {
+      
         if (line.includes(collection)) {
           filtered_schema_lines.push(line);
         } else if (line.includes("{") || line.includes("}")) {
@@ -217,7 +248,7 @@ export async function filterByCollection(schema_string: string, collection = "")
 }
 
 async function main() {
-  const { modified_custom_db_types } = await filterByCollection(await getPBType(), "users");
+  const { modified_custom_db_types } = await filterByCollection(await getPBType(), "");
   // console.log("modified_custom_db_types", modified_custom_db_types);
   // const modified_custom_db_types = await modifyAndInjectCustomSTypes(text_output);
   // console.log("text_output", text_output);

@@ -137,6 +137,179 @@ export interface ViewCollectionRecord {
 // utilities
 
 type MaybeArray<T> = T | T[];
+// ==== start of _mfas block =====
+
+
+export interface MfasResponse extends BaseCollectionResponse {
+	collectionName: '_mfas';
+	id: string;
+	collectionRef: string;
+	recordRef: string;
+	method: string;
+	created: string;
+	updated: string;
+}
+
+export interface MfasCreate extends BaseCollectionCreate {
+	id: string;
+	collectionRef: string;
+	recordRef: string;
+	method: string;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface MfasUpdate extends BaseCollectionUpdate {
+	id?: string;
+	collectionRef?: string;
+	recordRef?: string;
+	method?: string;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface MfasCollection {
+	type: 'base';
+	collectionId: string;
+	collectionName: '_mfas';
+	response: MfasResponse;
+	create: MfasCreate;
+	update: MfasUpdate;
+	relations: Record<string, never>;
+}
+
+// ==== end of _mfas block =====
+
+// ==== start of _otps block =====
+
+
+export interface OtpsResponse extends BaseCollectionResponse {
+	collectionName: '_otps';
+	id: string;
+	collectionRef: string;
+	recordRef: string;
+	created: string;
+	updated: string;
+}
+
+export interface OtpsCreate extends BaseCollectionCreate {
+	id: string;
+	collectionRef: string;
+	recordRef: string;
+	password: string;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface OtpsUpdate extends BaseCollectionUpdate {
+	id?: string;
+	collectionRef?: string;
+	recordRef?: string;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface OtpsCollection {
+	type: 'base';
+	collectionId: string;
+	collectionName: '_otps';
+	response: OtpsResponse;
+	create: OtpsCreate;
+	update: OtpsUpdate;
+	relations: Record<string, never>;
+}
+
+// ==== end of _otps block =====
+
+// ==== start of _externalAuths block =====
+
+
+export interface ExternalAuthsResponse extends BaseCollectionResponse {
+	collectionName: '_externalAuths';
+	id: string;
+	collectionRef: string;
+	recordRef: string;
+	provider: string;
+	providerId: string;
+	created: string;
+	updated: string;
+}
+
+export interface ExternalAuthsCreate extends BaseCollectionCreate {
+	id: string;
+	collectionRef: string;
+	recordRef: string;
+	provider: string;
+	providerId: string;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface ExternalAuthsUpdate extends BaseCollectionUpdate {
+	id?: string;
+	collectionRef?: string;
+	recordRef?: string;
+	provider?: string;
+	providerId?: string;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface ExternalAuthsCollection {
+	type: 'base';
+	collectionId: string;
+	collectionName: '_externalAuths';
+	response: ExternalAuthsResponse;
+	create: ExternalAuthsCreate;
+	update: ExternalAuthsUpdate;
+	relations: Record<string, never>;
+}
+
+// ==== end of _externalAuths block =====
+
+// ==== start of _authOrigins block =====
+
+
+export interface AuthOriginsResponse extends BaseCollectionResponse {
+	collectionName: '_authOrigins';
+	id: string;
+	collectionRef: string;
+	recordRef: string;
+	fingerprint: string;
+	created: string;
+	updated: string;
+}
+
+export interface AuthOriginsCreate extends BaseCollectionCreate {
+	id: string;
+	collectionRef: string;
+	recordRef: string;
+	fingerprint: string;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface AuthOriginsUpdate extends BaseCollectionUpdate {
+	id?: string;
+	collectionRef?: string;
+	recordRef?: string;
+	fingerprint?: string;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface AuthOriginsCollection {
+	type: 'base';
+	collectionId: string;
+	collectionName: '_authOrigins';
+	response: AuthOriginsResponse;
+	create: AuthOriginsCreate;
+	update: AuthOriginsUpdate;
+	relations: Record<string, never>;
+}
+
+// ==== end of _authOrigins block =====
+
 // ==== start of _superusers block =====
 
 
@@ -240,8 +413,128 @@ export interface UsersCollection {
 
 // ==== end of users block =====
 
+// ==== start of posts block =====
+
+
+export interface PostsResponse extends BaseCollectionResponse {
+	collectionName: 'posts';
+	id: string;
+	body: string;
+	image: string;
+	canonical: string;
+	published_at: string;
+	genre: '' | 'cool' | 'chill' | 'meh';
+	tags: any;
+	draft: boolean;
+	user: string;
+	created: string;
+	updated: string;
+}
+
+export interface PostsCreate extends BaseCollectionCreate {
+	id: string;
+	body?: string;
+	image?: File | null;
+	canonical?: string | URL;
+	published_at?: string | Date;
+	genre?: '' | 'cool' | 'chill' | 'meh';
+	tags?: any;
+	draft?: boolean;
+	user?: string;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface PostsUpdate extends BaseCollectionUpdate {
+	id?: string;
+	body?: string;
+	image?: File | null;
+	canonical?: string | URL;
+	published_at?: string | Date;
+	genre?: '' | 'cool' | 'chill' | 'meh';
+	tags?: any;
+	draft?: boolean;
+	user?: string;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface PostsCollection {
+	type: 'base';
+	collectionId: string;
+	collectionName: 'posts';
+	response: PostsResponse;
+	create: PostsCreate;
+	update: PostsUpdate;
+	relations: {
+		user: UsersCollection;
+		comments_via_post: CommentsCollection[];
+	};
+}
+
+// ==== end of posts block =====
+
+// ==== start of comments block =====
+
+
+export interface CommentsResponse extends BaseCollectionResponse {
+	collectionName: 'comments';
+	id: string;
+	body: string;
+	post: string;
+	user: string;
+	parent: string;
+	created: string;
+	updated: string;
+}
+
+export interface CommentsCreate extends BaseCollectionCreate {
+	id: string;
+	body?: string;
+	post: string;
+	user: string;
+	parent?: string;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface CommentsUpdate extends BaseCollectionUpdate {
+	id?: string;
+	body?: string;
+	post?: string;
+	user?: string;
+	parent?: string;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface CommentsCollection {
+	type: 'base';
+	collectionId: string;
+	collectionName: 'comments';
+	response: CommentsResponse;
+	create: CommentsCreate;
+	update: CommentsUpdate;
+	relations: {
+		post: PostsCollection;
+		user: UsersCollection;
+		parent: CommentsCollection;
+		comments_via_parent: CommentsCollection[];
+	};
+}
+
+// ==== end of comments block =====
+
+
+// ===== Schema =====
 
 export type Schema = {
+	_mfas: MfasCollection;
+	_otps: OtpsCollection;
+	_externalAuths: ExternalAuthsCollection;
+	_authOrigins: AuthOriginsCollection;
 	_superusers: SuperusersCollection;
 	users: UsersCollection;
+	posts: PostsCollection;
+	comments: CommentsCollection;
 };
