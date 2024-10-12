@@ -1,8 +1,8 @@
 import PocketBase from "pocketbase";
-import { TypedPocketBase } from "typed-pocketbase";
-import { Schema } from "./db-types";
+import { TypedPocketBase } from "@tigawanna/typed-pocketbase";
 import { buildCollectionDefinitions } from "./typed-pb/extra";
 import { Collection } from "./typed-pb/extra-types";
+import { Schema } from "../lib/pb/types/pb-types";
 
 export const PB_URL = "http://127.0.0.1:8090";
 // export const RC_PB_URL = "http://127.0.0.1:8091";
@@ -66,10 +66,10 @@ export async function getCollectiontypes(url: string) {
 
           
     const collections = await pb.collections.getFullList<Collection>();
-    console.log(" ✅ Get collections", collections);
+    // console.log(" ✅ Get collections", collections);
     const definitions = buildCollectionDefinitions(collections);
 
-    console.log(definitions);
+    console.log({definitions});
 
   } catch (error) {
     console.log("❌ Get collections failed", error);
@@ -80,11 +80,14 @@ export async function getRCCollectionTypes() {
   const pb = new TypedPocketBase<Schema>(PB_URL);
 
       const batch = pb.fromBatch()
-      batch.from("users").create({});
+      // batch.from("users").create({});
 
-    await pb.from("_superusers").authWithPassword("admin1@email.com", "admin1@email.com");
+    // await pb.from("_superusers").authWithPassword("admin1@email.com", "admin1@email.com");
     const collections = await pb.collections.getFullList<Collection>();
-    console.log(" ✅ Get collections", collections);
+    // console.log(" ✅ Get collections", collections);
+        const definitions = buildCollectionDefinitions(collections);
+
+        console.log({ definitions });
   // console.log(" ✅ Get collections", collections);
   } catch (error) {
     console.log("❌ Get collections failed", error);

@@ -1,3 +1,19 @@
+// === start of custom type ===
+  // Posts.PostsTags.tags
+  export type PostsTags = Array<{
+ 
+  }>;
+  // === end of custom type ===
+
+
+// === start of custom type ===
+  // Uwus.UwusBaggage.baggage
+  export type UwusBaggage = Array<{
+ 
+  }>;
+  // === end of custom type ===
+
+
 /**
  * This file was @generated using typed-pocketbase
  */
@@ -136,8 +152,8 @@ export interface ViewCollectionRecord {
 // utilities
 
 type MaybeArray<T> = T | T[];
+// ==== start of _mfas block =====
 
-// ===== _mfas =====
 
 export interface MfasResponse extends BaseCollectionResponse {
 	collectionName: '_mfas';
@@ -177,7 +193,10 @@ export interface MfasCollection {
 	relations: Record<string, never>;
 }
 
-// ===== _otps =====
+// ==== end of _mfas block =====
+
+// ==== start of _otps block =====
+
 
 export interface OtpsResponse extends BaseCollectionResponse {
 	collectionName: '_otps';
@@ -215,7 +234,10 @@ export interface OtpsCollection {
 	relations: Record<string, never>;
 }
 
-// ===== _externalAuths =====
+// ==== end of _otps block =====
+
+// ==== start of _externalAuths block =====
+
 
 export interface ExternalAuthsResponse extends BaseCollectionResponse {
 	collectionName: '_externalAuths';
@@ -258,7 +280,10 @@ export interface ExternalAuthsCollection {
 	relations: Record<string, never>;
 }
 
-// ===== _authOrigins =====
+// ==== end of _externalAuths block =====
+
+// ==== start of _authOrigins block =====
+
 
 export interface AuthOriginsResponse extends BaseCollectionResponse {
 	collectionName: '_authOrigins';
@@ -298,7 +323,10 @@ export interface AuthOriginsCollection {
 	relations: Record<string, never>;
 }
 
-// ===== _superusers =====
+// ==== end of _authOrigins block =====
+
+// ==== start of _superusers block =====
+
 
 export interface SuperusersResponse extends AuthCollectionResponse {
 	collectionName: '_superusers';
@@ -342,7 +370,10 @@ export interface SuperusersCollection {
 	relations: Record<string, never>;
 }
 
-// ===== users =====
+// ==== end of _superusers block =====
+
+// ==== start of users block =====
+
 
 export interface UsersResponse extends AuthCollectionResponse {
 	collectionName: 'users';
@@ -395,7 +426,10 @@ export interface UsersCollection {
 	};
 }
 
-// ===== posts =====
+// ==== end of users block =====
+
+// ==== start of posts block =====
+
 
 export interface PostsResponse extends BaseCollectionResponse {
 	collectionName: 'posts';
@@ -405,7 +439,7 @@ export interface PostsResponse extends BaseCollectionResponse {
 	canonical: string;
 	published_at: string;
 	genre: '' | 'cool' | 'chill' | 'meh';
-	tags: any;
+	tags?: PostsTags
 	draft: boolean;
 	user: string;
 	created: string;
@@ -419,7 +453,7 @@ export interface PostsCreate extends BaseCollectionCreate {
 	canonical?: string | URL;
 	published_at?: string | Date;
 	genre?: '' | 'cool' | 'chill' | 'meh';
-	tags?: any;
+	tags?: Record<string, any> | Array<any> | null;
 	draft?: boolean;
 	user?: string;
 	created?: string | Date;
@@ -433,7 +467,7 @@ export interface PostsUpdate extends BaseCollectionUpdate {
 	canonical?: string | URL;
 	published_at?: string | Date;
 	genre?: '' | 'cool' | 'chill' | 'meh';
-	tags?: any;
+	tags?: Record<string, any> | Array<any> | null;
 	draft?: boolean;
 	user?: string;
 	created?: string | Date;
@@ -453,7 +487,10 @@ export interface PostsCollection {
 	};
 }
 
-// ===== comments =====
+// ==== end of posts block =====
+
+// ==== start of comments block =====
+
 
 export interface CommentsResponse extends BaseCollectionResponse {
 	collectionName: 'comments';
@@ -462,6 +499,7 @@ export interface CommentsResponse extends BaseCollectionResponse {
 	post: string;
 	user: string;
 	parent: string;
+	mango: string;
 	created: string;
 	updated: string;
 }
@@ -472,6 +510,7 @@ export interface CommentsCreate extends BaseCollectionCreate {
 	post: string;
 	user: string;
 	parent?: string;
+	mango?: string;
 	created?: string | Date;
 	updated?: string | Date;
 }
@@ -482,6 +521,7 @@ export interface CommentsUpdate extends BaseCollectionUpdate {
 	post?: string;
 	user?: string;
 	parent?: string;
+	mango?: string;
 	created?: string | Date;
 	updated?: string | Date;
 }
@@ -498,8 +538,54 @@ export interface CommentsCollection {
 		user: UsersCollection;
 		parent: CommentsCollection;
 		comments_via_parent: CommentsCollection[];
+		mango: UwusCollection;
 	};
 }
+
+// ==== end of comments block =====
+
+// ==== start of uwus block =====
+
+
+export interface UwusResponse extends BaseCollectionResponse {
+	collectionName: 'uwus';
+	id: string;
+	name: string;
+	baggage?: UwusBaggage
+	created: string;
+	updated: string;
+}
+
+export interface UwusCreate extends BaseCollectionCreate {
+	id: string;
+	name?: string;
+	baggage?: Record<string, any> | Array<any> | null;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface UwusUpdate extends BaseCollectionUpdate {
+	id?: string;
+	name?: string;
+	baggage?: Record<string, any> | Array<any> | null;
+	created?: string | Date;
+	updated?: string | Date;
+}
+
+export interface UwusCollection {
+	type: 'base';
+	collectionId: string;
+	collectionName: 'uwus';
+	response: UwusResponse;
+	create: UwusCreate;
+	update: UwusUpdate;
+	relations: {
+		comments_via_mango: CommentsCollection[];
+	};
+}
+
+// ==== end of uwus block =====
+
 
 // ===== Schema =====
 
@@ -512,4 +598,5 @@ export type Schema = {
 	users: UsersCollection;
 	posts: PostsCollection;
 	comments: CommentsCollection;
-};
+	uwus: UwusCollection;
+}

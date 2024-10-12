@@ -1,5 +1,5 @@
 import { exec } from "child_process";
-import { access, mkdir,constants } from "fs/promises";
+import { access, mkdir,constants, readFile, writeFile } from "fs/promises";
 
 export async function runCommand(command: string): Promise<string> {
   try {
@@ -31,6 +31,17 @@ export async function checkAndCreateNestsedDir(dirPath: string) {
       } catch (error: any) {
         if (error.code === "ENOENT") {
           await mkdir(dirPath,{ recursive: true });
+        }
+        throw error;
+      }
+}
+export async function readOrCreateFile(path: string) {
+      try {
+      return await readFile(path, "utf-8");
+      } catch (error: any) {
+        if (error.code === "ENOENT") {
+          await writeFile(path, "");
+          return "";
         }
         throw error;
       }
