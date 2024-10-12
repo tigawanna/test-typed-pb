@@ -78,9 +78,14 @@ export async function getCollectiontypes(url: string) {
 export async function getRCCollectionTypes() {
   try {
   const pb = new TypedPocketBase<Schema>(PB_URL);
+    // const impersinateClient = await pb.impersonate("_superusers","user_id_being_impersonated",20);
+    // impersinateClient.from("posts").create({...});
+    // impersinateClient.from("posts").update({...});
+      // const batch = pb.fromBatch()
+      // batch.from("users").create({...});
+      // batch.from("users").upsert({...});
+      // await batch.send();
 
-      const batch = pb.fromBatch()
-      // batch.from("users").create({});
 
     // await pb.from("_superusers").authWithPassword("admin1@email.com", "admin1@email.com");
     const collections = await pb.collections.getFullList<Collection>();
